@@ -1,6 +1,6 @@
 {
   "name": "Budgie",
-  "short_name"Budgie",
+  "short_name":"Budgie",
   "description": "Personal budgeting for fun and profit",
   "start_url": "/",
   "display": "standalone",

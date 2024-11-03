@@ -10,7 +10,11 @@ export enum ETransactionType {
 export interface IAccount {
   id?: number;
   name: string;
-  icon: string;
+}
+
+export interface IAccountNull {
+  id: 0;
+  name: 'none';
 }
 
 export interface ITransaction {
@@ -23,7 +27,7 @@ export interface ITransaction {
   destinationAccountId?: number;
   relatedTransactionId?: number;
   dueDate?: Date;
-  remainingAmount?: number;
+  settled: boolean;
 }
 
 export class Db extends Dexie {
@@ -33,8 +37,8 @@ export class Db extends Dexie {
   constructor() {
     super('BudgieDB');
     this.version(1).stores({
-      accounts: '++id, name, icon',
-      transactions: '++id, type, date, sourceAccountId, destinationAccountId, relatedTransactionId, dueDate, remainingAmount',
+      accounts: '++id, name',
+      transactions: '++id, type, date, sourceAccountId, destinationAccountId, relatedTransactionId',
     });
   }
 }

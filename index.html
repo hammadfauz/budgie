@@ -6,9 +6,20 @@
     <link rel="icon" type="image/png" href="/icons/icon-192x192.png" />
     <link rel="manifest" href="/manifest.json" />
     <meta name="theme-color" content="#ffffff" />
+    <style>
+      input::-webkit-outer-spin-button,
+      input::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      input[type=number] {
+        -moz-appearance: textfield;
+      }
+    </style>
     <title>Budgie</title>
   </head>
-  <body>
+  <body style="margin: 0px; font-family: sans-serif;">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>
