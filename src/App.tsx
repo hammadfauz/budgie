@@ -14,9 +14,9 @@ import { EditAccount } from './screens/editAccount';
 
 export const App = () => {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={getUrl('')}>
       <Routes>
-        <Route path={getUrl('/')} element={<Layout />} >
+        <Route path='/' element={<Layout />} >
           <Route path='transactions' element={<Transactions />} />
           <Route path='transaction/add' element={<AddTransaction />} />
           <Route path='accounts' element={<Accounts />} />
