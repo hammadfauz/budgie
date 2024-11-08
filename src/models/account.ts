@@ -15,7 +15,7 @@ const sumTransactions = (
   transactions: ITransaction[]
 ): number => {
   return transactions.map(tx => tx.amount)
-    .reduce((a,b) => paisa(b).add(a), paisa(0))
+    .reduce((a, b) => paisa(b).add(a), paisa(0))
     .value;
 };
 
@@ -30,6 +30,7 @@ const getAllCreditTransactions = (
 const getAllDebitTransactions = (
   account: IAccount
 ): Promise<ITransaction[]> => {
+  if (!account?.id) return Promise.resolve([]);
   return db.transactions.where('sourceAccountId')
     .equals(account.id)
     .toArray();
@@ -38,6 +39,7 @@ const getAllDebitTransactions = (
 const getSettledCreditTransactions = (
   account: IAccount
 ): Promise<ITransaction[]> => {
+  if (!account?.id) return Promise.resolve([]);
   return db.transactions.where('destinationAccountId')
     .equals(account.id)
     .and((transaction: ITransaction) => transaction.settled)
@@ -47,6 +49,7 @@ const getSettledCreditTransactions = (
 const getSettledDebitTransactions = (
   account: IAccount
 ): Promise<ITransaction[]> => {
+  if (!account?.id) return Promise.resolve([]);
   return db.transactions.where('sourceAccountId')
     .equals(account.id)
     .and((transaction: ITransaction) => transaction.settled)

@@ -18,10 +18,10 @@ interface ITransactionTypeInputProps {
 
 interface IAccountInputProps {
   value?: number;
-  onChange: (v:number) => void;
+  onChange: (v: number | undefined) => void;
 };
 
-const TransactionTypeInput = ({value,onChange}: ITransactionTypeInputProps) => {
+const TransactionTypeInput = ({ value, onChange }: ITransactionTypeInputProps) => {
   const styles = {
     main: {
       backgroundColor: 'rgba(0,0,0,0)',
@@ -37,10 +37,10 @@ const TransactionTypeInput = ({value,onChange}: ITransactionTypeInputProps) => {
     <select style={styles.main}
       value={value}
       onChange={(e) => onChange(e.target.value as ETransactionType)}
-      >
+    >
       {Object.keys(ETransactionType).map(t => (
         <option key={t} value={t}>
-         {t}
+          {t}
         </option>
       ))
       }
@@ -48,28 +48,28 @@ const TransactionTypeInput = ({value,onChange}: ITransactionTypeInputProps) => {
   );
 };
 
-const AccountInput = ({value, onChange}: IAccountInputProps) => {
-  const [accounts, setAccounts] = useState<(IAccount|IAccountNull)[]>([]);
+const AccountInput = ({ value, onChange }: IAccountInputProps) => {
+  const [accounts, setAccounts] = useState<(IAccount | IAccountNull)[]>([]);
   useEffect(() => {
     const getAccounts = async () => {
       const _accounts = await db.accounts.toArray();
-      setAccounts([{name: 'none', id: 0},..._accounts]);
+      setAccounts([{ name: 'none', id: 0 }, ..._accounts]);
       return null;
     };
     getAccounts();
-  },[])
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  }, [])
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.target.value;
     if (value === null) {
-      onChange(null)
-    }else{
+      onChange(undefined)
+    } else {
       onChange(Number(value));
     }
   };
   return (
     <>
       <select value={value}
-        onChange={e => onChange(Number(e.target.value))} >
+        onChange={handleChange} >
         {accounts.map(a => (
           <option key={a.id} value={a.id}>
             {a.name}
@@ -114,7 +114,7 @@ export const AddTransaction = () => {
       sourceAccountId: 0,
       destinationAccountId: 0,
     });
-  },[transaction.type]);
+  }, [transaction.type]);
   return (<div style={styles.form}>
     <div style={styles.headerWithInput}>
       Add new <TransactionTypeInput value={transaction.type}
@@ -136,24 +136,24 @@ export const AddTransaction = () => {
         }} />
     </div>
     <div style={styles.field}>
-      {transaction.type !== ETransactionType.Income?<>
-        From account: 
+      {transaction.type !== ETransactionType.Income ? <>
+        From account:
         <AccountInput value={transaction.sourceAccountId}
           onChange={v => setTransaction({
             ...transaction,
             sourceAccountId: v,
           })} />
-      </>:null}
+      </> : null}
     </div>
     <div style={styles.field}>
-      {transaction.type !== ETransactionType.Expense?<>
-        To account: 
+      {transaction.type !== ETransactionType.Expense ? <>
+        To account:
         <AccountInput value={transaction.destinationAccountId}
           onChange={v => setTransaction({
             ...transaction,
             destinationAccountId: v,
           })} />
-      </>:null}
+      </> : null}
     </div>
     <div style={styles.field}>
       Amount: <input type='number'
@@ -161,7 +161,7 @@ export const AddTransaction = () => {
         onChange={(e) => setTransaction({
           ...transaction,
           amount: Number(e.target.value),
-        })}/>
+        })} />
     </div>
   </div>);
 };

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import { VitePWA } from 'vite-plugin-pwa'
+import { getUrl } from './src/utils/getUrl';
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -9,7 +10,7 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       devOptions: {
-         enabled: true,
+        enabled: true,
       },
       manifest: {
         name: 'Budgie',
@@ -36,11 +37,17 @@ export default defineConfig({
           {
             urlPattern: /\.(?:js|css|html|json|png|jpg|jpeg|svg)$/,
             handler: process.env.ENVIRONMENT === 'development'
-              ?'NetworkFirst'
-              :'CacheFirst',
+              ? 'NetworkFirst'
+              : 'CacheFirst',
           },
         ],
       },
     }),
   ],
+  base: getUrl('/'),
+  build: {
+    commonjsOptions: {
+      transformMixedEsModules: true,
+    },
+  },
 })

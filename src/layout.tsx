@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Outlet, Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { FloatingActionButton } from './components/floatingActionButton';
+import { getUrl } from './utils/getUrl';
 
 const Header = () => {
   const styles = {
@@ -28,7 +30,7 @@ const Header = () => {
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
-        <img src='/icons/icon-512x512.png'
+        <img src={getUrl('/icons/icon-512x512.png')}
           alt='Budgie logo'
           style={styles.img} />
         <h1 style={styles.name}>
@@ -56,6 +58,14 @@ const Footer = () => {
 };
 
 export const Layout: React.FC = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    let path = localStorage.getItem('ghPath');
+    if (path) {
+      localStorage.removeItem('ghPath');
+      navigate(getUrl('/'), { replace: true });
+    }
+  }, []);
   const styles = {
     layout: {
       display: 'grid',
