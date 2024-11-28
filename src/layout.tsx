@@ -1,8 +1,65 @@
 import * as React from 'react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { FloatingActionButton } from './components/floatingActionButton';
 import { getUrl } from './utils/getUrl';
+
+const SidebarButton = ({ show, onClick }: { show: boolean, onClick: () => void }) => {
+  const styles = {
+    main: {
+      display: 'flex',
+      flexDirection: 'column' as 'column',
+      width: '40px',
+      height: '40px',
+      justifyContent: 'space-between',
+      cursor: 'pointer',
+    },
+    bar1: {
+      height: '5px',
+      background: '#fff',
+      transition: 'all 300ms ease-in-out',
+      transform: show
+        ? 'rotate(45deg) translate(12px,10px) scaleX(1.43)'
+        : '',
+    },
+    bar2: {
+      height: '5px',
+      background: '#fff',
+      transition: 'all 300ms ease-in-out',
+    },
+    bar3: {
+      height: '5px',
+      background: '#fff',
+      transition: 'all 300ms ease-in-out',
+      transform: show
+        ? 'rotate(-45deg) translate(13px,-13px) scaleX(1.43)'
+        : '',
+    },
+  };
+  return (<div style={styles.main} onClick={onClick}>
+    <div style={styles.bar1}></div>
+    {!show && <div style={styles.bar2}></div>}
+    <div style={styles.bar3}></div>
+  </div>);
+};
+
+const SideBar = ({ children }: { children?: React.ReactElement }) => {
+  const [show, setShow] = useState(false);
+  const styles = {
+    menuContainer: {
+      position: 'absolute' as 'absolute',
+      right: '0px',
+      bottom: '20px',
+      top: '80px',
+      background: '#333',
+      padding: '10px',
+    },
+  };
+  return (<>
+    <SidebarButton show={show} onClick={() => setShow(!show)} />
+    {show && <div style={styles.menuContainer}>{children}</div>}
+  </>);
+};
 
 const Header = () => {
   const styles = {
@@ -26,6 +83,10 @@ const Header = () => {
     name: {
       fontSize: '1.5rem',
     },
+    sidebarLink: {
+      textDecoration: 'none',
+      color: 'inherit',
+    },
   };
   return (
     <header style={styles.header}>
@@ -37,6 +98,11 @@ const Header = () => {
           Budgie
         </h1>
       </div>
+      <SideBar>
+        <Link style={styles.sidebarLink} to='/account/add'>
+          Create account
+        </Link>
+      </SideBar>
     </header>
   );
 };
