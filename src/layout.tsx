@@ -91,9 +91,11 @@ const Header = () => {
   return (
     <header style={styles.header}>
       <div style={styles.logo}>
-        <img src={getUrl('/icons/icon-512x512.png')}
-          alt='Budgie logo'
-          style={styles.img} />
+        <Link to='/'>
+          <img src={getUrl('/icons/icon-512x512.png')}
+            alt='Budgie logo'
+            style={styles.img} />
+        </Link>
         <h1 style={styles.name}>
           Budgie
         </h1>
