@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { db, IAccount } from '../models/db';
 import * as account from '../models/account';
 import { paisa } from '../utils/paisa';
 import {
@@ -63,7 +62,7 @@ export const Accounts = () => {
       return null;
     };
     getAccounts();
-  },[]);
+  }, []);
 
   return (
     <div style={styles.main}>
@@ -78,15 +77,15 @@ export const Accounts = () => {
             {_account.name}
             <Link style={styles.editLink}
               to={`/account/${_account.id}`}
-              state={{account:_account}}>
+              state={{ account: _account }}>
               <img style={styles.editIcon} src={edit} />
             </Link>
           </div>
           <div style={styles.fields}>
             <div>Balance: {_account.settledBalance}</div>
-            {paisa(_account.pendingBalance).value !== paisa(_account.settledBalance).value?
+            {paisa(_account.pendingBalance).value !== paisa(_account.settledBalance).value ?
               <div>Pending balance: {_account.pendingBalance}</div>
-            :null}
+              : null}
           </div>
           <div style={styles.actions}>
             <img src={caretRight} style={styles.enterButton} />
