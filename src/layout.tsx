@@ -99,8 +99,8 @@ const Header = () => {
         </h1>
       </div>
       <SideBar>
-        <Link style={styles.sidebarLink} to='/account/add'>
-          Create account
+        <Link style={styles.sidebarLink} to='/accounts/'>
+          Accounts
         </Link>
       </SideBar>
     </header>
