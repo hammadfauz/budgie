@@ -57,7 +57,7 @@ const SideBar = ({ children }: { children?: React.ReactElement }) => {
   };
   return (<>
     <SidebarButton show={show} onClick={() => setShow(!show)} />
-    {show && <div style={styles.menuContainer}>{children}</div>}
+    {show && <div onClick={() => setShow(!show)} style={styles.menuContainer}>{children}</div>}
   </>);
 };
 
