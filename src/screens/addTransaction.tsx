@@ -3,6 +3,7 @@ import {
   useState,
   useEffect,
 } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   ITransaction,
   ETransactionType,
@@ -10,6 +11,7 @@ import {
   IAccountNull,
   db,
 } from '../models/db';
+import { reverse } from '../models/transaction';
 
 interface ITransactionTypeInputProps {
   value: ETransactionType,
@@ -99,6 +101,7 @@ export const AddTransaction = () => {
       justifyContent: 'space-between',
     },
   };
+  const navigate = useNavigate();
   const [transaction, setTransaction] = useState<ITransaction>({
     type: ETransactionType.Expense,
     amount: 0,
@@ -115,6 +118,17 @@ export const AddTransaction = () => {
       destinationAccountId: 0,
     });
   }, [transaction.type]);
+
+  const save = async () => {
+    const id = await db.transactions.add(transaction);
+    if (transaction.type === ETransactionType.LoanTransfer) {
+      transaction.id = id;
+      await db.transactions.add(reverse(transaction));
+    }
+    navigate(-1);
+    return true;
+  };
+
   return (<div style={styles.form}>
     <div style={styles.headerWithInput}>
       Add new <TransactionTypeInput value={transaction.type}
@@ -163,5 +177,8 @@ export const AddTransaction = () => {
           amount: Number(e.target.value),
         })} />
     </div>
+    <button onClick={save}>
+      Save Transaction
+    </button>
   </div>);
 };
