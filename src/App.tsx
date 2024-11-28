@@ -22,6 +22,7 @@ export const App = () => {
           <Route path='accounts' element={<Accounts />} />
           <Route path='account/add' element={<AddAccount />} />
           <Route path='account/:id' element={<EditAccount />} />
+          <Route index element={<Transactions />} />
         </Route>
       </Routes>
     </BrowserRouter>
