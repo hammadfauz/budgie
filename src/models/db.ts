@@ -1,4 +1,17 @@
 import Dexie, { Table } from 'dexie';
+import relationships from 'dexie-relationships';
+
+type TRelationships<T> = {
+  [key: string]: keyof T;
+};
+
+interface IRelationshipTable<T, U = undefined> extends Table<T> {
+  with: (relationsShips: TRelationships<T>) => Dexie.Promise<(
+    U extends undefined
+    ? T
+    : T & U
+  )[]>;
+};
 
 export enum ETransactionType {
   Income = 'Income',
@@ -30,15 +43,20 @@ export interface ITransaction {
   settled: boolean;
 }
 
+interface ITransactionJoins {
+  sourceAccount?: IAccount,
+  destinationAccount?: IAccount,
+}
+
 export class Db extends Dexie {
-  accounts!: Table<IAccount>;
-  transactions!: Table<ITransaction>;
+  accounts!: IRelationshipTable<IAccount>;
+  transactions!: IRelationshipTable<ITransaction, ITransactionJoins>;
 
   constructor() {
-    super('BudgieDB');
+    super('BudgieDB', { addons: [relationships] });
     this.version(1).stores({
       accounts: '++id, name',
-      transactions: '++id, type, date, sourceAccountId, destinationAccountId, relatedTransactionId',
+      transactions: '++id, type, date, sourceAccountId -> accounts.id, destinationAccountId -> accounts.id, relatedTransactionId',
     });
   }
 }

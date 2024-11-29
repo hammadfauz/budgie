@@ -1,4 +1,4 @@
-import { ITransaction, ETransactionType } from './db';
+import { db, ITransaction, ETransactionType } from './db';
 
 export const reverse = (transaction: ITransaction): ITransaction => {
   return {
@@ -12,4 +12,12 @@ export const reverse = (transaction: ITransaction): ITransaction => {
     dueDate: transaction.dueDate,
     settled: false,
   };
+};
+
+export const getAll = async () => {
+  const transactions = await db.transactions.with({
+    sourceAccount: 'sourceAccountId',
+    destinationAccount: 'destinationAccountId',
+  });
+  return transactions;
 };
