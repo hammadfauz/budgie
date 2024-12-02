@@ -118,10 +118,19 @@ const Footer = () => {
       display: 'flex',
       justifyContent: 'space-around',
       borderTop: '1px solid #ddd',
-    }
+    },
+    nav: {
+      textDecoration: 'none',
+    },
   };
   return (
     <footer style={styles.footer}>
+      <Link style={styles.nav} to='/accounts'>
+        📒 Accounts
+      </Link>
+      <Link style={styles.nav} to='/transactions'>
+        📄 Transactions
+      </Link>
     </footer>
   );
 };
