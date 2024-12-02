@@ -9,30 +9,30 @@ const SidebarButton = ({ show, onClick }: { show: boolean, onClick: () => void }
     main: {
       display: 'flex',
       flexDirection: 'column' as 'column',
-      width: '40px',
-      height: '40px',
-      justifyContent: 'space-between',
+      width: '30px',
+      height: '30px',
+      justifyContent: 'space-around',
       cursor: 'pointer',
     },
     bar1: {
-      height: '5px',
+      height: '3px',
       background: '#fff',
       transition: 'all 300ms ease-in-out',
       transform: show
-        ? 'rotate(45deg) translate(12px,10px) scaleX(1.43)'
+        ? 'rotate(45deg) translate(6px,5px) scaleX(1.43)'
         : '',
     },
     bar2: {
-      height: '5px',
+      height: '3px',
       background: '#fff',
       transition: 'all 300ms ease-in-out',
     },
     bar3: {
-      height: '5px',
+      height: '3px',
       background: '#fff',
       transition: 'all 300ms ease-in-out',
       transform: show
-        ? 'rotate(-45deg) translate(13px,-13px) scaleX(1.43)'
+        ? 'rotate(-45deg) translate(6px,-6px) scaleX(1.43)'
         : '',
     },
   };
@@ -50,7 +50,7 @@ const SideBar = ({ children }: { children?: React.ReactElement }) => {
       position: 'absolute' as 'absolute',
       right: '0px',
       bottom: '20px',
-      top: '80px',
+      top: '44px',
       background: '#333',
       padding: '10px',
     },
@@ -69,19 +69,20 @@ const Header = () => {
       alignItems: 'center',
       backgroundColor: '#333',
       color: '#fff',
-      padding: '10px',
+      padding: '5px',
     },
     logo: {
       display: 'flex',
       alignItems: 'center',
     },
     img: {
-      width: '40px',
-      height: '40px',
+      width: '30px',
+      height: '30px',
       marginRight: '10px',
     },
     name: {
-      fontSize: '1.5rem',
+      fontSize: '1.1rem',
+      lineHeight: '0.5rem',
     },
     sidebarLink: {
       textDecoration: 'none',
@@ -142,6 +143,7 @@ export const Layout: React.FC = () => {
     },
     content: {
       padding: '20px',
+      overflow: 'scroll',
     },
   };
 
