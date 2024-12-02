@@ -82,9 +82,9 @@ export const Accounts = () => {
             </Link>
           </div>
           <div style={styles.fields}>
-            <div>Balance: {_account.settledBalance}</div>
+            <div>Available balance: {_account.settledBalance}</div>
             {paisa(_account.pendingBalance).value !== paisa(_account.settledBalance).value ?
-              <div>Pending balance: {_account.pendingBalance}</div>
+              <div>Settled balance: {_account.pendingBalance}</div>
               : null}
           </div>
           <div style={styles.actions}>
