@@ -6,20 +6,6 @@ import { ETransactionType } from '../models/db';
 type TTransactions = Awaited<ReturnType<typeof transaction.getAll>>;
 type TElement<T> = T extends (infer U)[] ? U : never;
 
-const IncomeTransactionTile = ({ transaction }: { transaction: TElement<TTransactions> }) => {
-  const styles = {
-    main: {
-      border: '1px solid #cacaca',
-      borderLeft: '4px solid green',
-      borderRadius: '10px',
-      padding: '10px 15px',
-    },
-  };
-  return (<div style={styles.main}>
-    {transaction.destinationAccount!.name} {transaction.amount}
-  </div>);
-};
-
 const TransactionTile = ({ transaction }: { transaction: TElement<TTransactions> }) => {
   const styles = {
     main: {
@@ -53,13 +39,12 @@ const TransactionTile = ({ transaction }: { transaction: TElement<TTransactions>
   return (<div style={styles.main}>
     <div style={styles.date}>{transaction.date.toLocaleString()}</div>
     <div style={styles.accounts}>
-      {transaction.type === ETransactionType.Income ?
-        transaction.destinationAccount!.name
-        : transaction.type === ETransactionType.Expense ?
-          transaction.sourceAccount!.name
-          : `${transaction.sourceAccount?.name} ➡️  ${transaction.destinationAccount?.name}`
-      }
-
+      {transaction.sourceAccount?.name ? <div>
+        <strong>From</strong> {transaction.sourceAccount.name}
+      </div> : null}
+      {transaction.destinationAccount?.name ? <div>
+        <strong>To</strong> {transaction.destinationAccount.name}
+      </div> : null}
     </div>
     <div style={styles.amount}>
       {transaction.amount}
@@ -81,7 +66,7 @@ export const Transactions: React.FC = () => {
   useEffect(() => {
     const getTransactions = async () => {
       const _transactions = await transaction.getAll();
-      setTransactions(_transactions);
+      setTransactions(_transactions.sort((t1, t2) => t1.date >= t2.date ? -1 : 1));
       return null;
     };
     getTransactions();
