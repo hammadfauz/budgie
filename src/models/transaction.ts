@@ -19,7 +19,12 @@ export const getAll = async () => {
     sourceAccount: 'sourceAccountId',
     destinationAccount: 'destinationAccountId',
   });
-  return transactions;
+  return transactions
+    .sort((t1, t2) => {
+      return t1.date >= t2.date
+        ? -1
+        : 1;
+    });
 };
 
 export const add = async (transaction: ITransaction) => {

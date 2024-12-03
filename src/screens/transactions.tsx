@@ -1,18 +1,17 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import * as transaction from '../models/transaction';
-import { ETransactionType } from '../models/db';
+import * as Transaction from '../models/transaction';
 
-type TTransactions = Awaited<ReturnType<typeof transaction.getAll>>;
+type TTransactions = Awaited<ReturnType<typeof Transaction.getAll>>;
 type TElement<T> = T extends (infer U)[] ? U : never;
 
 const TransactionTile = ({ transaction }: { transaction: TElement<TTransactions> }) => {
   const styles = {
     main: {
       border: '1px solid #cacaca',
-      borderLeft: transaction.type === ETransactionType.Income
+      borderLeft: transaction.type === Transaction.ETransactionType.Income
         ? '4px solid green'
-        : transaction.type === ETransactionType.Expense
+        : transaction.type === Transaction.ETransactionType.Expense
           ? '4px solid red'
           : '4px solid blue',
       borderRadius: '10px',
@@ -65,8 +64,8 @@ export const Transactions: React.FC = () => {
 
   useEffect(() => {
     const getTransactions = async () => {
-      const _transactions = await transaction.getAll();
-      setTransactions(_transactions.sort((t1, t2) => t1.date >= t2.date ? -1 : 1));
+      const _transactions = await Transaction.getAll();
+      setTransactions(_transactions);
       return null;
     };
     getTransactions();
