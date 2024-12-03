@@ -21,3 +21,13 @@ export const getAll = async () => {
   });
   return transactions;
 };
+
+export const add = async (transaction: ITransaction) => {
+  const id = await db.transactions.add(transaction);
+  if (transaction.type === ETransactionType.LoanTransfer) {
+    transaction.id = id;
+    await db.transactions.add(reverse(transaction));
+  }
+};
+
+export { ITransaction, ETransactionType } from './db';

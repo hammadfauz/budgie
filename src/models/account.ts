@@ -92,3 +92,5 @@ export const getAll = async (): Promise<IAccountWithBalance[]> => {
   );
   return accountsWithBalances;
 };
+
+export { IAccount, IAccountNull } from './db';

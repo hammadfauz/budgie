@@ -4,18 +4,12 @@ import {
   useEffect,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {
-  ITransaction,
-  ETransactionType,
-  IAccount,
-  IAccountNull,
-  db,
-} from '../models/db';
-import { reverse } from '../models/transaction';
+import * as Account from '../models/account';
+import * as Transaction from '../models/transaction';
 
 interface ITransactionTypeInputProps {
-  value: ETransactionType,
-  onChange: (v: ETransactionType) => void,
+  value: Transaction.ETransactionType,
+  onChange: (v: Transaction.ETransactionType) => void,
 };
 
 interface IAccountInputProps {
@@ -38,9 +32,9 @@ const TransactionTypeInput = ({ value, onChange }: ITransactionTypeInputProps) =
   return (
     <select style={styles.main}
       value={value}
-      onChange={(e) => onChange(e.target.value as ETransactionType)}
+      onChange={(e) => onChange(e.target.value as Transaction.ETransactionType)}
     >
-      {Object.keys(ETransactionType).map(t => (
+      {Object.keys(Transaction.ETransactionType).map(t => (
         <option key={t} value={t}>
           {t}
         </option>
@@ -51,10 +45,10 @@ const TransactionTypeInput = ({ value, onChange }: ITransactionTypeInputProps) =
 };
 
 const AccountInput = ({ value, onChange }: IAccountInputProps) => {
-  const [accounts, setAccounts] = useState<(IAccount | IAccountNull)[]>([]);
+  const [accounts, setAccounts] = useState<(Account.IAccount | Account.IAccountNull)[]>([]);
   useEffect(() => {
     const getAccounts = async () => {
-      const _accounts = await db.accounts.toArray();
+      const _accounts = await Account.getAll();
       setAccounts([{ name: 'none', id: 0 }, ..._accounts]);
       return null;
     };
@@ -102,8 +96,8 @@ export const AddTransaction = () => {
     },
   };
   const navigate = useNavigate();
-  const [transaction, setTransaction] = useState<ITransaction>({
-    type: ETransactionType.Expense,
+  const [transaction, setTransaction] = useState<Transaction.ITransaction>({
+    type: Transaction.ETransactionType.Expense,
     amount: 0,
     date: new Date(),
     sourceAccountId: 0,
@@ -120,12 +114,12 @@ export const AddTransaction = () => {
   }, [transaction.type]);
 
   const save = async () => {
-    const id = await db.transactions.add(transaction);
-    if (transaction.type === ETransactionType.LoanTransfer) {
-      transaction.id = id;
-      await db.transactions.add(reverse(transaction));
+    try {
+      await Transaction.add(transaction);
+      navigate(-1);
+    } catch (e) {
+      console.error((e as Error).message);
     }
-    navigate(-1);
     return true;
   };
 
@@ -150,7 +144,7 @@ export const AddTransaction = () => {
         }} />
     </div>
     <div style={styles.field}>
-      {transaction.type !== ETransactionType.Income ? <>
+      {transaction.type !== Transaction.ETransactionType.Income ? <>
         From account:
         <AccountInput value={transaction.sourceAccountId}
           onChange={v => setTransaction({
@@ -160,7 +154,7 @@ export const AddTransaction = () => {
       </> : null}
     </div>
     <div style={styles.field}>
-      {transaction.type !== ETransactionType.Expense ? <>
+      {transaction.type !== Transaction.ETransactionType.Expense ? <>
         To account:
         <AccountInput value={transaction.destinationAccountId}
           onChange={v => setTransaction({
