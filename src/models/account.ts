@@ -93,4 +93,8 @@ export const getAll = async (): Promise<IAccountWithBalance[]> => {
   return accountsWithBalances;
 };
 
+export const add = async (account: IAccount) => {
+  await db.accounts.add(account);
+};
+
 export { IAccount, IAccountNull } from './db';

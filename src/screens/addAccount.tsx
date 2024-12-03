@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { db } from '../models/db';
+import { add } from '../models/account';
 import { useNavigate } from 'react-router-dom';
 
 export const AddAccount = () => {
@@ -8,7 +8,7 @@ export const AddAccount = () => {
   const navigate = useNavigate();
 
   const handleSave = async () => {
-    await db.accounts.add({ name });
+    await add({ name });
     navigate(-1);
     return true;
   };
