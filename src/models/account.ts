@@ -97,4 +97,11 @@ export const add = async (account: IAccount) => {
   await db.accounts.add(account);
 };
 
+export const get = async (id: number): Promise<IAccount | undefined> => {
+  return db.accounts.get(id);
+};
+
+export const put = async (account: IAccount) => {
+  await db.accounts.put(account);
+};
 export { IAccount, IAccountNull } from './db';

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import {db, IAccount} from '../models/db';
+import * as Account from '../models/account';
 import {
   useNavigate,
   useLocation,
@@ -12,24 +12,24 @@ export const EditAccount = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [account, setAccount ] = useState<IAccount|undefined>();
+  const [account, setAccount] = useState<IAccount | undefined>();
 
   useEffect(() => {
     if (location.state?.account) {
       setAccount(location.state.account);
-    }else{
+    } else {
       const getAccounts = async () => {
-        const _account = await db.accounts.get(Number(id));
+        const _account = await Account.get(Number(id));
         setAccount(_account);
       };
       getAccounts();
     }
-  },[]);
+  }, []);
 
 
-  const handleSave = async (e : React.MouseEvent) => {
+  const handleSave = async (e: React.MouseEvent) => {
     if (!!account)
-      await db.accounts.put(account);
+      await Account.put(account);
     navigate(-1);
     return true;
   };
@@ -38,7 +38,7 @@ export const EditAccount = () => {
     <>
       Edit account
       <input type='text'
-        value={account?account.name:''}
+        value={account ? account.name : ''}
         onChange={e => setAccount({
           ...account,
           name: e.target.value,
