@@ -93,8 +93,17 @@ export const getAll = async (): Promise<IAccountWithBalance[]> => {
   return accountsWithBalances;
 };
 
+const validate = (account: IAccount) => {
+  if (!account.name) throw new Error('Account name cannot be empty');
+};
+
 export const add = async (account: IAccount) => {
-  await db.accounts.add(account);
+  try {
+    validate(account);
+    await db.accounts.add(account);
+  } catch (e) {
+    throw e;
+  }
 };
 
 export const get = async (id: number): Promise<IAccount | undefined> => {
@@ -102,6 +111,11 @@ export const get = async (id: number): Promise<IAccount | undefined> => {
 };
 
 export const put = async (account: IAccount) => {
-  await db.accounts.put(account);
+  try {
+    validate(account);
+    await db.accounts.put(account);
+  } catch (e) {
+    throw e;
+  }
 };
 export type { IAccount, IAccountNull } from './db';

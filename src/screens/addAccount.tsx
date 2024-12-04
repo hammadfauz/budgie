@@ -8,9 +8,13 @@ export const AddAccount = () => {
   const navigate = useNavigate();
 
   const handleSave = async () => {
-    await add({ name });
-    navigate(-1);
-    return true;
+    try {
+      await add({ name });
+      navigate(-1);
+      return true;
+    } catch (e) {
+      console.error((e as Error).message);
+    }
   };
 
   return (

@@ -55,7 +55,7 @@ export class Db extends Dexie {
   constructor() {
     super('BudgieDB', { addons: [relationships] });
     this.version(1).stores({
-      accounts: '++id, name',
+      accounts: '++id, &name',
       transactions: '++id, type, date, sourceAccountId -> accounts.id, destinationAccountId -> accounts.id, relatedTransactionId',
     });
   }
