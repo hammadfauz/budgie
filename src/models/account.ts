@@ -104,4 +104,4 @@ export const get = async (id: number): Promise<IAccount | undefined> => {
 export const put = async (account: IAccount) => {
   await db.accounts.put(account);
 };
-export { IAccount, IAccountNull } from './db';
+export type { IAccount, IAccountNull } from './db';

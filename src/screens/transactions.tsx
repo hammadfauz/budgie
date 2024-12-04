@@ -74,7 +74,8 @@ export const Transactions: React.FC = () => {
   return (
     <div style={styles.main}>
       {transactions.map(transaction => {
-        return <TransactionTile transaction={transaction} />
+        return <TransactionTile key={transaction.id}
+          transaction={transaction} />
       })}
     </div>
   );

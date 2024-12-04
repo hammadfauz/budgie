@@ -27,12 +27,44 @@ export const getAll = async () => {
     });
 };
 
+export const validate = (transaction: ITransaction) => {
+  if (transaction.amount === 0)
+    throw new Error('Transaction amount cannot be 0');
+  if (
+    transaction.type === ETransactionType.Income
+    && transaction.destinationAccountId === undefined
+  )
+    throw new Error('Destination account cannot be empty for income transaction');
+  if (
+    transaction.type === ETransactionType.Expense
+    && transaction.sourceAccountId === undefined
+  )
+    throw new Error('Source account cannot be empty for expense transaction');
+  if (
+    (
+      transaction.type === ETransactionType.Transfer
+      || transaction.type === ETransactionType.LoanTransfer
+    )
+    && (
+      transaction.sourceAccountId === undefined
+      || transaction.destinationAccountId === undefined
+    )
+  )
+    throw new Error('Source or destination account cannot be empty for transfer transaction');
+};
+
 export const add = async (transaction: ITransaction) => {
-  const id = await db.transactions.add(transaction);
-  if (transaction.type === ETransactionType.LoanTransfer) {
-    transaction.id = id;
-    await db.transactions.add(reverse(transaction));
+  try {
+    validate(transaction);
+    const id = await db.transactions.add(transaction);
+    if (transaction.type === ETransactionType.LoanTransfer) {
+      transaction.id = id;
+      await db.transactions.add(reverse(transaction));
+    }
+  } catch (e) {
+    throw e;
   }
 };
 
-export { ITransaction, ETransactionType } from './db';
+export { ETransactionType } from './db';
+export type { ITransaction } from './db';
