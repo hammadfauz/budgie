@@ -76,6 +76,14 @@ const AccountInput = ({ value, onChange }: IAccountInputProps) => {
   );
 }
 
+const format = (date: Date): string => {
+  return (
+    new Date(
+      date.getTime() - date.getTimezoneOffset() * 60000
+    )
+  ).toISOString().slice(0, 16);
+};
+
 export const AddTransaction = () => {
   const styles = {
     form: {
@@ -132,8 +140,8 @@ export const AddTransaction = () => {
         })} />
     </div>
     <div style={styles.field}>
-      On: <input type='date'
-        value={transaction.date.toISOString().split('T')[0]}
+      On: <input type='datetime-local'
+        value={format(transaction.date)}
         onChange={e => {
           if (e.target.valueAsDate) {
             setTransaction({
