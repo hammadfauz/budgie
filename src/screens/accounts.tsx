@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import * as account from '../models/account';
 import { paisa } from '../utils/paisa';
+import { List } from '../components/list';
 import {
   edit,
   caretRight,
@@ -13,11 +14,6 @@ export const Accounts = () => {
   const [accounts, setAccounts] = useState<account.IAccountWithBalance[]>([]);
 
   const styles = {
-    main: {
-      display: 'flex',
-      flexDirection: 'column' as 'column',
-      gap: '15px',
-    },
     createButton: {
       padding: '5px 10px',
     },
@@ -65,7 +61,7 @@ export const Accounts = () => {
   }, []);
 
   return (
-    <div style={styles.main}>
+    <List>
       <Link to='/account/add'>
         <button style={styles.createButton}>
           ➕ Create Account
@@ -88,10 +84,12 @@ export const Accounts = () => {
               : null}
           </div>
           <div style={styles.actions}>
-            <img src={caretRight} style={styles.enterButton} />
+            <Link to={`/transactions/${_account.id}`} state={_account}>
+              <img src={caretRight} style={styles.enterButton} />
+            </Link>
           </div>
         </div>
       ))}
-    </div>
+    </List>
   )
 };

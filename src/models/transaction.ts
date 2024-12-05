@@ -14,17 +14,32 @@ export const reverse = (transaction: ITransaction): ITransaction => {
   };
 };
 
-export const getAll = async () => {
-  const transactions = await db.transactions.with({
-    sourceAccount: 'sourceAccountId',
-    destinationAccount: 'destinationAccountId',
-  });
+const sortByDateLatest = (transactions: ITransaction[]) => {
   return transactions
     .sort((t1, t2) => {
       return t1.date >= t2.date
         ? -1
         : 1;
     });
+};
+
+export const getByAccount = async (accountId: number) => {
+  const transactions = await db.transactions
+    .where("sourceAccountId").equals(accountId)
+    .or("destinationAccountId").equals(accountId)
+    .with({
+      sourceAccount: 'sourceAccountId',
+      destinationAccount: 'destinationAccountId',
+    });
+  return sortByDateLatest(transactions);
+};
+
+export const getAll = async () => {
+  const transactions = await db.transactions.with({
+    sourceAccount: 'sourceAccountId',
+    destinationAccount: 'destinationAccountId',
+  });
+  return sortByDateLatest(transactions);
 };
 
 export const validate = (transaction: ITransaction) => {

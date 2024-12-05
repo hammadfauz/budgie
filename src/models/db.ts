@@ -1,16 +1,31 @@
-import Dexie, { Table } from 'dexie';
+import Dexie, { Table, WhereClause } from 'dexie';
 import relationships from 'dexie-relationships';
 
 type TRelationships<T> = {
   [key: string]: keyof T;
 };
 
+interface IRelationshipWhereClause<T, U = undefined> extends WhereClause {
+  equals(key: Dexie.IndexableType): IRelationshipCollection<T, U>;
+}
+interface IRelationshipCollection<T, U = undefined> extends Dexie.Collection {
+  with: (relationsShips: TRelationships<T>) => Dexie.Promise<(
+    U extends undefined
+    ? T
+    : T & U
+  )[]>;
+  where(index: string | string[]): IRelationshipWhereClause<T, U>;
+  or(index: string | string[]): IRelationshipWhereClause<T, U>;
+};
 interface IRelationshipTable<T, U = undefined> extends Table<T> {
   with: (relationsShips: TRelationships<T>) => Dexie.Promise<(
     U extends undefined
     ? T
     : T & U
   )[]>;
+  where(index: string | string[]): IRelationshipWhereClause<T, U>;
+  or(index: string | string[]): IRelationshipWhereClause<T, U>;
+
 };
 
 export enum ETransactionType {

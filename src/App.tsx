@@ -7,6 +7,7 @@ import {
 import { getUrl } from './utils/getUrl';
 import { Layout } from './layout';
 import { Transactions } from './screens/transactions';
+import { AccountTransactions } from './screens/accountTransactions';
 import { AddTransaction } from './screens/addTransaction';
 import { Accounts } from './screens/accounts';
 import { AddAccount } from './screens/addAccount';
@@ -19,6 +20,7 @@ export const App = () => {
         <Route path='/' element={<Layout />} >
           <Route path='transactions' element={<Transactions />} />
           <Route path='transaction/add' element={<AddTransaction />} />
+          <Route path='transactions/:accountid' element={<AccountTransactions />} />
           <Route path='accounts' element={<Accounts />} />
           <Route path='account/add' element={<AddAccount />} />
           <Route path='account/:id' element={<EditAccount />} />
